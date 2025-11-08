@@ -102,12 +102,15 @@
     </style>
 
     {{-- =================== SECTION 1: HERO FULLSCREEN =================== --}}
-<section class="landing-root landing-hero relative h-screen w-full overflow-hidden bg-[#1a1a1a] text-white {{ $hasSelected ? '' : 'overflow-hidden' }}">
-
+    <section
+        id="home"
+        class="landing-root landing-hero relative h-screen w-full overflow-hidden bg-[#1a1a1a] text-white {{ $hasSelected ? '' : 'overflow-hidden' }}"
+    >
         <div class="cover"></div>
 
-        {{-- JUDUL BESAR (FIXED, TIDAK IKUT SCROLL) --}}
+        {{-- JUDUL BESAR (tetap, tidak ikut scroll) --}}
         @if($hasSelected)
+            {{-- Judul besar untuk HALAMAN PULAU --}}
             <div class="hero-title-wrapper">
                 <div class="max-w-3xl space-y-2">
                     @if($selectedIsland->place_label)
@@ -133,6 +136,27 @@
                     @endif
                 </div>
             </div>
+        @else
+            {{-- Judul besar untuk HOME: Budaya Indonesia --}}
+            <div class="hero-title-wrapper">
+                <div class="max-w-3xl space-y-2 text-center md:text-left">
+                    <p class="hero-title-line text-[9px] sm:text-[10px] md:text-xs tracking-[0.3em] uppercase text-white/80">
+                        Nusantara • Pulau • Cerita • Tradisi
+                    </p>
+                    <h1
+                        class="hero-title-line content-title-1
+                               text-3xl sm:text-4xl md:text-6xl lg:text-7xl
+                               font-bold leading-tight sm:leading-none drop-shadow-[0_0_20px_rgba(0,0,0,0.7)]">
+                        BUDAYA INDONESIA
+                    </h1>
+                    <p
+                        class="hero-title-line content-title-2
+                               text-base sm:text-xl md:text-2xl lg:text-3xl
+                               font-semibold text-white/90 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)]">
+                        Jelajahi pulau, cerita daerah, dan tradisi Nusantara.
+                    </p>
+                </div>
+            </div>
         @endif
 
         {{-- AREA ANIMASI KARTU (isi seluruh hero) --}}
@@ -154,30 +178,98 @@
         <div class="indicator"></div>
     </section>
 
-    {{-- =================== SECTION 2: ABOUT / HISTORY / DESTINASI / DLL =================== --}}
+    {{-- =================== SECTION 2A: HOME CONTENT (Budaya Indonesia) =================== --}}
+    @if(!$hasSelected)
+        <section class="relative z-[10] bg-[#050505] text-white py-12 sm:py-16 px-4 sm:px-6">
+            <div class="max-w-5xl mx-auto space-y-12">
+
+                {{-- ABOUT INDONESIA --}}
+                <section id="about">
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
+                        Tentang Budaya Indonesia
+                    </h2>
+                    <p class="text-sm sm:text-base text-white/80 leading-relaxed">
+                        Indonesia adalah negara kepulauan dengan ratusan suku, bahasa, dan tradisi. Halaman ini
+                        mengajakmu menjelajahi keragaman budaya dari Sabang sampai Merauke melalui pulau-pulau utama.
+                    </p>
+                </section>
+
+                {{-- HISTORY INDONESIA --}}
+                <section id="history">
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
+                        Sejarah Singkat Nusantara
+                    </h2>
+                    <p class="text-sm sm:text-base text-white/80 leading-relaxed">
+                        Dari kerajaan-kerajaan kuno hingga masa modern, Nusantara tumbuh sebagai titik temu budaya,
+                        perdagangan, dan kepercayaan. Kamu bisa memperkaya konten ini dari database nanti.
+                    </p>
+                </section>
+
+                {{-- STATISTIK INDONESIA --}}
+                <section id="stats">
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
+                        Statistik Budaya
+                    </h2>
+                    <img
+            src="https://www.finereport.com/en/wp-content/uploads/2020/03/2019071010A.png"
+            alt="Contoh grafik statistik"
+            class="max-w-3xl w-full rounded-xl border border-white/10 shadow-lg"
+        >
+                    <p class="text-sm sm:text-base text-white/80 leading-relaxed">
+                        Placeholder statistik: jumlah pulau, jumlah suku, bahasa daerah, dan lain-lain. Nantinya bisa
+                        dihubungkan ke data dinamis jika diperlukan.
+                    </p>
+                </section>
+
+                {{-- DAFTAR PULAU (ISLANDS) --}}
+                <section id="islands">
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
+                        Pulau-Pulau Utama
+                    </h2>
+                    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        @foreach($carouselData as $item)
+                            <button
+                                onclick="window.location.href='/islands/{{ $item['slug'] }}'"
+                                class="text-left border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition"
+                            >
+                                <div class="h-28 w-full bg-cover bg-center"
+                                     style="background-image: url('{{ $item['image'] }}')"></div>
+                                <div class="p-3">
+                                    <div class="text-xs uppercase tracking-[0.2em] text-white/60">
+                                        {{ $item['place'] ?? 'Pulau' }}
+                                    </div>
+                                    <div class="text-sm font-semibold">
+                                        {{ $item['title2'] ?? $item['slug'] }}
+                                    </div>
+                                </div>
+                            </button>
+                        @endforeach
+                    </div>
+                </section>
+
+                {{-- QUIZ INDONESIA --}}
+                <section id="quiz">
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
+                        Kuis Budaya Indonesia
+                    </h2>
+                    <p class="text-sm sm:text-base text-white/80">
+                        Di sini nanti bisa jadi area kuis umum tentang Nusantara — misalnya pilihan ganda tentang
+                        pulau, suku, atau rumah adat.
+                    </p>
+                </section>
+            </div>
+        </section>
+    @endif
+
+    {{-- =================== SECTION 2B: DETAIL PULAU (ABOUT / HISTORY / DESTINASI / DLL) =================== --}}
     @if($hasSelected)
         <section class="relative z-[10] bg-[#050505] text-white py-12 sm:py-16 px-4 sm:px-6">
             <div class="max-w-5xl mx-auto space-y-12">
 
-                {{-- ABOUT --}}
-                <div id="about">
+                {{-- ABOUT PULAU --}}
+                <section id="about">
                     <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
                         Tentang {{ $selectedIsland->title ?? $selectedIsland->name }}
-                        <p>p<p>
-                            p<p><p>p</p>
-                        p</p>
-                    p</p>
-                p</p>
-                <p>p<p>
-                            p<p><p>p</p>
-                        p</p>
-                    p</p>
-                p</p>
-                <p>p<p>
-                            p<p><p>p</p>
-                        p</p>
-                    p</p>
-                p</p>
                     </h2>
                     <p class="text-sm sm:text-base text-white/80 leading-relaxed">
                         {{ $selectedIsland->short_description ?? 'Belum ada deskripsi singkat. Tambahkan konten about di database.' }}
@@ -195,13 +287,13 @@
                             @endforeach
                         </div>
                     @endif
-                </div>
+                </section>
 
-                {{-- HISTORY --}}
+                {{-- HISTORY / CERITA DAERAH --}}
                 @if(!empty($featuresByType['history']) && $featuresByType['history']->count())
-                    <div id="history">
+                    <section id="history">
                         <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
-                            Sejarah Singkat
+                            Sejarah & Cerita Daerah
                         </h2>
                         <div class="space-y-4">
                             @foreach($featuresByType['history'] as $history)
@@ -213,12 +305,93 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </section>
                 @endif
+
+               {{-- STATISTIK --}}
+<div id="stats" class="mt-10">
+    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
+        Statistik {{ $selectedIsland->title ?? $selectedIsland->name }}
+    </h2>
+
+    {{-- Card jumlah penduduk --}}
+    <div class="grid sm:grid-cols-3 gap-4 mb-6">
+        <div class="border border-white/10 rounded-2xl p-4 bg-white/5">
+            <p class="text-xs text-white/60 uppercase tracking-[0.2em]">Jumlah Penduduk</p>
+            <p class="mt-2 text-2xl font-semibold">
+                {{ $selectedIsland->population ? number_format($selectedIsland->population, 0, ',', '.') : '—' }}
+            </p>
+            <p class="text-[11px] text-white/40 mt-1">Perkiraan total penduduk pulau ini.</p>
+        </div>
+    </div>
+
+    <div class="space-y-8">
+        {{-- AGAMA --}}
+        <div>
+            <h3 class="text-lg font-semibold mb-2">Agama</h3>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="text-xs space-y-1">
+                    @forelse($demographics['religion'] as $row)
+                        <div class="flex justify-between">
+                            <span>{{ $row->label }}</span>
+                            <span>{{ $row->percentage }}%</span>
+                        </div>
+                    @empty
+                        <p class="text-white/50">Belum ada data agama.</p>
+                    @endforelse
+                </div>
+                <div class="h-52">
+                    <canvas id="islandReligionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        {{-- SUKU --}}
+        <div>
+            <h3 class="text-lg font-semibold mb-2">Suku</h3>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="text-xs space-y-1">
+                    @forelse($demographics['ethnicity'] as $row)
+                        <div class="flex justify-between">
+                            <span>{{ $row->label }}</span>
+                            <span>{{ $row->percentage }}%</span>
+                        </div>
+                    @empty
+                        <p class="text-white/50">Belum ada data suku.</p>
+                    @endforelse
+                </div>
+                <div class="h-52">
+                    <canvas id="islandEthnicityChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        {{-- BAHASA --}}
+        <div>
+            <h3 class="text-lg font-semibold mb-2">Bahasa Daerah</h3>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="text-xs space-y-1">
+                    @forelse($demographics['language'] as $row)
+                        <div class="flex justify-between">
+                            <span>{{ $row->label }}</span>
+                            <span>{{ $row->percentage }}%</span>
+                        </div>
+                    @empty
+                        <p class="text-white/50">Belum ada data bahasa.</p>
+                    @endforelse
+                </div>
+                <div class="h-56">
+                    <canvas id="islandLanguageChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                 {{-- DESTINASI --}}
                 @if(!empty($featuresByType['destination']) && $featuresByType['destination']->count())
-                    <div id="destinations">
+                    <section id="destinations">
                         <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
                             Destinasi Populer
                         </h2>
@@ -229,7 +402,8 @@
                                         <img
                                             src="{{ $dest->image_url }}"
                                             alt="{{ $dest->title }}"
-                                            class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-white/10 flex-shrink-0">
+                                            class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-white/10 flex-shrink-0"
+                                        >
                                     @endif
                                     <div>
                                         <h3 class="text-sm sm:text-base font-semibold mb-1">
@@ -244,12 +418,12 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </section>
                 @endif
 
                 {{-- MAKANAN KHAS --}}
                 @if(!empty($featuresByType['food']) && $featuresByType['food']->count())
-                    <div id="foods">
+                    <section id="foods">
                         <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
                             Makanan Khas
                         </h2>
@@ -260,25 +434,26 @@
                                         <img
                                             src="{{ $food->image_url }}"
                                             alt="{{ $food->title }}"
-                                            class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-white/10 flex-shrink-0">
+                                            class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-white/10 flex-shrink-0"
+                                        >
                                     @endif
                                     <div>
                                         <h3 class="text-sm sm:text-base font-semibold mb-1">
                                             {{ $food->title }}
                                         </h3>
-                                        <p class="text-xs sm:text-sm text-white/70">
+                                        <p class="text-xs sm:text-sm text-white/70 leading-relaxed">
                                             {{ $food->description }}
                                         </p>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </section>
                 @endif
 
-                {{-- BUDAYA --}}
+                {{-- BUDAYA & TRADISI (opsional, tidak di navbar tapi tetap ada) --}}
                 @if(!empty($featuresByType['culture']) && $featuresByType['culture']->count())
-                    <div id="cultures">
+                    <section id="cultures">
                         <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
                             Budaya & Tradisi
                         </h2>
@@ -294,8 +469,19 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </section>
                 @endif
+
+                {{-- QUIZ PULAU --}}
+                <section id="quiz">
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
+                        Kuis {{ $selectedIsland->title ?? $selectedIsland->name }}
+                    </h2>
+                    <p class="text-sm sm:text-base text-white/80">
+                        Area ini bisa berisi kuis khusus tentang {{ $selectedIsland->title ?? $selectedIsland->name }}
+                        — misalnya tentang destinasi, makanan khas, atau budaya setempat.
+                    </p>
+                </section>
 
             </div>
         </section>
@@ -303,251 +489,378 @@
 @endsection
 
 @push('scripts')
-    {{-- GSAP --}}
+    {{-- GSAP untuk hero cards --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
+    {{-- Chart.js untuk statistik --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-        // ===== DATA DARI LARAVEL =====
-        const data        = @json($carouselData);
-        const initialSlug = @json(optional($selectedIsland)->slug);
+        // ================== GSAP CAROUSEL ==================
+        document.addEventListener('DOMContentLoaded', () => {
+            // ===== DATA DARI LARAVEL =====
+            const data        = @json($carouselData);
+            const initialSlug = @json(optional($selectedIsland)->slug);
 
-        const _ = (id) => document.getElementById(id);
-
-        // Bangun HTML card dari data
-        const cards = data.map((i, index) => `
-          <div
-            class="card"
-            id="card${index}"
-            data-slug="${i.slug}"
-            style="background-image:url(${i.image})"
-          >
-            <div class="card-content bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-5">
-              <div class="content-place text-[11px] sm:text-[13px] tracking-[1px] opacity-80 uppercase">
-                ${i.place ?? ''}
-              </div>
-              <div class="content-title-1 text-[22px] sm:text-[26px] leading-none">
-                ${i.title ?? ''}
-              </div>
-              <div class="content-title-2 text-[18px] sm:text-[22px] leading-none">
-                ${i.title2 ?? ''}
-              </div>
-            </div>
-          </div>
-        `).join('');
-
-        _('demo').innerHTML = cards;
-
-        // Nomor slide
-        const slideNumbers = data
-            .map((_, index) => `<div class="item" id="slide-item-${index}">${index + 1}</div>`)
-            .join('');
-        _('slide-numbers').innerHTML = slideNumbers;
-
-        // Klik kartu → pindah ke halaman pulau (tab yang sama)
-        function attachCardClicks() {
-            const cardElements = document.querySelectorAll('.card');
-
-            cardElements.forEach((card, index) => {
-                const slugFromData = data[index]?.slug || card.dataset.slug;
-                if (!slugFromData) return;
-
-                card.addEventListener('click', () => {
-                    window.location.href = `/islands/${slugFromData}`;
-                });
-            });
-        }
-
-        // ===== LOGIKA ANIMASI GSAP =====
-        const range = (n) => Array(n).fill(0).map((_, j) => j);
-        const set   = gsap.set;
-        const ease  = "sine.inOut";
-
-        function getCard(index)       { return `#card${index}`; }
-        function getSliderItem(index) { return `#slide-item-${index}`; }
-
-        // default order: [0,1,2,...]
-        let order = range(data.length);
-
-        // kalau ada pulau yang dipilih, jadikan dia index pertama
-        if (initialSlug) {
-            const idx = data.findIndex(item => item.slug === initialSlug);
-            if (idx > 0) {
-                order = [
-                    ...order.slice(idx),
-                    ...order.slice(0, idx),
-                ];
-            }
-        }
-
-        let offsetTop   = 200;
-        let offsetLeft  = 700;
-        let cardWidth   = 200;
-        let cardHeight  = 300;
-        let gap         = 40;
-        let numberSize  = 50;
-
-        function animate(target, duration, properties) {
-            return new Promise((resolve) => {
-                gsap.to(target, {
-                    ...properties,
-                    duration,
-                    onComplete: resolve
-                });
-            });
-        }
-
-        function setupLayout() {
-            const { innerHeight: height, innerWidth: width } = window;
-
-            // layout desktop / tablet
-            if (width >= 768) {
-                cardWidth  = 220;
-                cardHeight = 320;
-                offsetTop  = height - 430;
-                offsetLeft = width - 830;
-                gap        = 40;
-            } else {
-                // layout mobile / tablet kecil (portrait)
-                cardWidth  = Math.min(width * 0.75, 260);
-                cardHeight = Math.min(height * 0.45, 280);
-                offsetTop  = height - (cardHeight + 110);
-                offsetLeft = width - (cardWidth * 1.9);
-                gap        = 24;
-            }
-        }
-
-        function init() {
-            if (!data.length) {
+            if (!Array.isArray(data) || data.length === 0) {
                 console.warn('Tidak ada data island di database.');
                 return;
             }
 
-            setupLayout();
+            const _ = (id) => document.getElementById(id);
+            const coverEl = document.querySelector('.cover');
 
-            const [active, ...rest] = order;
-            const { innerHeight: height, innerWidth: width } = window;
+            // Bangun HTML card dari data
+            const cards = data.map((i, index) => `
+              <div
+                class="card"
+                id="card${index}"
+                data-slug="${i.slug}"
+                style="background-image:url(${i.image})"
+              >
+                <div class="card-content bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-5">
+                  <div class="content-place text-[11px] sm:text-[13px] tracking-[1px] opacity-80 uppercase">
+                    ${i.place ?? ''}
+                  </div>
+                  <div class="content-title-1 text-[22px] sm:text-[26px] leading-none">
+                    ${i.title ?? ''}
+                  </div>
+                  <div class="content-title-2 text-[18px] sm:text-[22px] leading-none">
+                    ${i.title2 ?? ''}
+                  </div>
+                </div>
+              </div>
+            `).join('');
 
-            gsap.set(".cover", { x: 0 });
-            gsap.set(getCard(active), { x: 0, y: 0, width: width, height: height, borderRadius: 0 });
+            const demoEl = _('demo');
+            if (!demoEl) {
+                console.warn('#demo container tidak ditemukan');
+                return;
+            }
+            demoEl.innerHTML = cards;
 
-            rest.forEach((i, index) => {
-                gsap.set(getCard(i), {
-                    x: offsetLeft + 400 + index * (cardWidth + gap),
-                    y: offsetTop,
-                    width: cardWidth,
-                    height: cardHeight,
-                    zIndex: 30
+            // Nomor slide
+            const slideNumbers = data
+                .map((_, index) => `<div class="item" id="slide-item-${index}">${index + 1}</div>`)
+                .join('');
+            const slideNumbersEl = _('slide-numbers');
+            if (slideNumbersEl) {
+                slideNumbersEl.innerHTML = slideNumbers;
+            }
+
+            // Klik kartu → pindah ke halaman pulau (tab yang sama)
+            function attachCardClicks() {
+                const cardElements = document.querySelectorAll('.card');
+
+                cardElements.forEach((card, index) => {
+                    const slugFromData = data[index]?.slug || card.dataset.slug;
+                    if (!slugFromData) return;
+
+                    card.addEventListener('click', () => {
+                        window.location.href = `/islands/${slugFromData}`;
+                    });
                 });
-            });
+            }
 
-            gsap.to(".cover", {
-                x: width + 400,
-                duration: 1.2,
-                ease,
-                onComplete: () => loop()
-            });
-        }
+            // ===== LOGIKA ANIMASI GSAP =====
+            const range = (n) => Array(n).fill(0).map((_, j) => j);
+            const set   = gsap.set;
+            const ease  = "sine.inOut";
 
-        function step() {
-            return new Promise((resolve) => {
-                order.push(order.shift());
+            function getCard(index)       { return `#card${index}`; }
+            function getSliderItem(index) { return `#slide-item-${index}`; }
+
+            // default order: [0,1,2,...]
+            let order = range(data.length);
+
+            // kalau ada pulau yang dipilih, jadikan dia index pertama
+            if (initialSlug) {
+                const idx = data.findIndex(item => item.slug === initialSlug);
+                if (idx > 0) {
+                    order = [
+                        ...order.slice(idx),
+                        ...order.slice(0, idx),
+                    ];
+                }
+            }
+
+            let offsetTop   = 200;
+            let offsetLeft  = 700;
+            let cardWidth   = 200;
+            let cardHeight  = 300;
+            let gap         = 40;
+            let numberSize  = 50;
+
+            function animate(target, duration, properties) {
+                return new Promise((resolve) => {
+                    gsap.to(target, {
+                        ...properties,
+                        duration,
+                        onComplete: resolve
+                    });
+                });
+            }
+
+            function setupLayout() {
+                const { innerHeight: height, innerWidth: width } = window;
+
+                // layout desktop / tablet
+                if (width >= 768) {
+                    cardWidth  = 220;
+                    cardHeight = 320;
+                    offsetTop  = height - 430;
+                    offsetLeft = width - 830;
+                    gap        = 40;
+                } else {
+                    // layout mobile / tablet kecil (portrait)
+                    cardWidth  = Math.min(width * 0.75, 260);
+                    cardHeight = Math.min(height * 0.45, 280);
+                    offsetTop  = height - (cardHeight + 110);
+                    offsetLeft = width - (cardWidth * 1.9);
+                    gap        = 24;
+                }
+            }
+
+            function init() {
+                setupLayout();
+
                 const [active, ...rest] = order;
-                const prv = rest[rest.length - 1];
+                const { innerHeight: height, innerWidth: width } = window;
 
-                gsap.set(getCard(prv),    { zIndex: 10 });
-                gsap.set(getCard(active), { zIndex: 20 });
-                gsap.to(getCard(prv),     { scale: 1.5, ease });
+                if (coverEl) {
+                    // awalnya tutup full
+                    gsap.set(coverEl, { x: 0 });
+                }
 
-                gsap.to(getCard(active), {
+                gsap.set(getCard(active), {
                     x: 0,
                     y: 0,
-                    ease,
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    borderRadius: 0,
-                    onComplete: () => {
-                        const xNew = offsetLeft + (rest.length - 1) * (cardWidth + gap);
-                        gsap.set(getCard(prv), {
-                            x: xNew,
-                            y: offsetTop,
-                            width: cardWidth,
-                            height: cardHeight,
-                            zIndex: 30,
-                            scale: 1,
-                            borderRadius: 10
-                        });
-                        gsap.set(getSliderItem(prv), { x: rest.length * numberSize });
-                        resolve();
-                    }
+                    width: width,
+                    height: height,
+                    borderRadius: 0
                 });
 
                 rest.forEach((i, index) => {
-                    if (i !== prv) {
-                        const xNew = offsetLeft + index * (cardWidth + gap);
-                        gsap.to(getCard(i), {
-                            x: xNew,
-                            y: offsetTop,
-                            width: cardWidth,
-                            height: cardHeight,
-                            ease,
-                            delay: 0.1 * (index + 1)
-                        });
+                    gsap.set(getCard(i), {
+                        x: offsetLeft + 400 + index * (cardWidth + gap),
+                        y: offsetTop,
+                        width: cardWidth,
+                        height: cardHeight,
+                        zIndex: 30,
+                        borderRadius: 10
+                    });
+                });
+
+                // geser "tirai" cover keluar layar → baru mulai loop
+                if (coverEl) {
+                    gsap.to(coverEl, {
+                        x: width + 400,
+                        duration: 1.2,
+                        ease,
+                        onComplete: () => {
+                            if (order.length > 1) loop();
+                        }
+                    });
+                } else {
+                    if (order.length > 1) loop();
+                }
+            }
+
+            function step() {
+                return new Promise((resolve) => {
+                    order.push(order.shift());
+                    const [active, ...rest] = order;
+                    const prv = rest[rest.length - 1];
+
+                    gsap.set(getCard(prv),    { zIndex: 10 });
+                    gsap.set(getCard(active), { zIndex: 20 });
+                    gsap.to(getCard(prv),     { scale: 1.5, ease });
+
+                    gsap.to(getCard(active), {
+                        x: 0,
+                        y: 0,
+                        ease,
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        borderRadius: 0,
+                        onComplete: () => {
+                            const xNew = offsetLeft + (rest.length - 1) * (cardWidth + gap);
+                            gsap.set(getCard(prv), {
+                                x: xNew,
+                                y: offsetTop,
+                                width: cardWidth,
+                                height: cardHeight,
+                                zIndex: 30,
+                                scale: 1,
+                                borderRadius: 10
+                            });
+                            if (slideNumbersEl) {
+                                gsap.set(getSliderItem(prv), { x: rest.length * numberSize });
+                            }
+                            resolve();
+                        }
+                    });
+
+                    rest.forEach((i, index) => {
+                        if (i !== prv) {
+                            const xNew = offsetLeft + index * (cardWidth + gap);
+                            gsap.to(getCard(i), {
+                                x: xNew,
+                                y: offsetTop,
+                                width: cardWidth,
+                                height: cardHeight,
+                                ease,
+                                delay: 0.1 * (index + 1)
+                            });
+                        }
+                    });
+                });
+            }
+
+            async function loop() {
+                // kalau cuma 1 card, nggak perlu loop
+                if (order.length <= 1) return;
+
+                await animate(".indicator", 2,   { x: 0 });
+                await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
+                set(".indicator", { x: -window.innerWidth });
+                await step();
+                loop();
+            }
+
+            function loadImage(src) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload  = () => resolve(img);
+                    img.onerror = reject;
+                    img.src     = src;
+                });
+            }
+
+            async function loadImages() {
+                const promises = data.map(({ image }) => loadImage(image));
+                return Promise.all(promises);
+            }
+
+            function animateHeroTitle() {
+                const heroLines = document.querySelectorAll('.hero-title-line');
+                if (!heroLines.length) return;
+
+                gsap.from(heroLines, {
+                    y: 40,
+                    opacity: 0,
+                    duration: 1.1,
+                    ease: "power3.out",
+                    stagger: 0.15
+                });
+            }
+
+            async function start() {
+                try {
+                    await loadImages();
+                    attachCardClicks();
+                    init();              // cover digeser + mulai loop
+                    animateHeroTitle();
+                } catch (e) {
+                    console.error("Image failed to load", e);
+                }
+            }
+
+            // Re-init layout ketika resize
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    init();
+                }, 150);
+            });
+
+            start();
+        });
+    </script>
+
+    @if($hasSelected)
+    <script>
+        // ================== CHART STATISTIK PULAU ==================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Data dari Laravel (Collection -> array JSON)
+            const religionRows  = @json($demographics['religion'] ?? []);
+            const ethnicityRows = @json($demographics['ethnicity'] ?? []);
+            const languageRows  = @json($demographics['language'] ?? []);
+
+            function makePieChart(canvasId, rows) {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas || !rows.length) return;
+
+                const ctx = canvas.getContext('2d');
+                const labels = rows.map(r => r.label);
+                const data   = rows.map(r => r.percentage);
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels,
+                        datasets: [{
+                            data,
+                            backgroundColor: [
+                                '#FF6384', '#36A2EB', '#FFCE56',
+                                '#4BC0C0', '#9966FF', '#FF9F40'
+                            ],
+                            borderWidth: 1,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { usePointStyle: true }
+                            }
+                        }
                     }
                 });
-            });
-        }
-
-        async function loop() {
-            await animate(".indicator", 2,   { x: 0 });
-            await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
-            set(".indicator", { x: -window.innerWidth });
-            await step();
-            loop();
-        }
-
-        function loadImage(src) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.onload  = () => resolve(img);
-                img.onerror = reject;
-                img.src     = src;
-            });
-        }
-
-        async function loadImages() {
-            const promises = data.map(({ image }) => loadImage(image));
-            return Promise.all(promises);
-        }
-
-        function animateHeroTitle() {
-            if (!initialSlug) return;
-
-            gsap.from(".hero-title-line", {
-                y: 40,
-                opacity: 0,
-                duration: 1.1,
-                ease: "power3.out",
-                stagger: 0.15
-            });
-        }
-
-        async function start() {
-            if (!data.length) return;
-            try {
-                await loadImages();
-                attachCardClicks();
-                init();
-                animateHeroTitle();
-            } catch (e) {
-                console.error("Image failed to load", e);
             }
-        }
 
-        // Re-init layout ketika resize
-        window.addEventListener('resize', () => {
-            setupLayout();
+            function makeBarChart(canvasId, rows) {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas || !rows.length) return;
+
+                const ctx = canvas.getContext('2d');
+                const labels = rows.map(r => r.label);
+                const data   = rows.map(r => r.percentage);
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [{
+                            data,
+                            label: 'Persentase',
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 10 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Render chart jika ada datanya
+            if (religionRows.length)  makePieChart('islandReligionChart', religionRows);
+            if (ethnicityRows.length) makePieChart('islandEthnicityChart', ethnicityRows);
+            if (languageRows.length)  makeBarChart('islandLanguageChart', languageRows);
         });
-
-        start();
     </script>
+    @endif
 @endpush

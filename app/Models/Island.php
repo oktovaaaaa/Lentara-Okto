@@ -27,12 +27,16 @@ class Island extends Model
         return 'slug';
     }
     public function features()
-{
-    return $this->hasMany(\App\Models\IslandFeature::class);
-}
+    {
+        return $this->hasMany(\App\Models\IslandFeature::class);
+    }
+    public function demographics()
+    {
+        return $this->hasMany(IslandDemographic::class);
+    }
 
     protected $casts = [
         'is_active' => 'boolean',
-        'order'     => 'integer',
+        'order' => 'integer',
     ];
 }

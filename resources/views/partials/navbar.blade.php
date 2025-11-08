@@ -1,4 +1,10 @@
 {{-- resources/views/partials/navbar.blade.php --}}
+
+@php
+    // Mode island = kalau ada $selectedIsland (halaman pulau Sumatera, Jawa, dll)
+    $isIslandMode = isset($selectedIsland) && $selectedIsland;
+@endphp
+
 <header class="site-header" id="top">
     <nav class="nav-pill" role="navigation" aria-label="Navigasi utama">
         {{-- Tombol hamburger (mobile) --}}
@@ -14,22 +20,64 @@
 
         {{-- Link navbar (desktop) --}}
         <div class="nav-links" id="navLinks">
-            {{-- Nanti kita bisa ganti target sesuai section Piforrr7 (home, tentang, statistik, sejarah, pulau) --}}
-            <button class="nav-btn is-active" data-target="#home">
-                <span class="icon">🏠</span><span>Home</span>
-            </button>
-            <button class="nav-btn" data-target="#about">
-                <span class="icon">ℹ️</span><span>Tentang</span>
-            </button>
-            <button class="nav-btn" data-target="#stats">
-                <span class="icon">📊</span><span>Statistik</span>
-            </button>
-            <button class="nav-btn" data-target="#history">
-                <span class="icon">📜</span><span>Sejarah</span>
-            </button>
-            <button class="nav-btn" data-target="#islands">
-                <span class="icon">🗺️</span><span>Pulau</span>
-            </button>
+            @if(!$isIslandMode)
+                {{-- MODE HOME: Budaya Indonesia --}}
+                <button class="nav-btn is-active" data-target="#home">
+                    <span class="icon">🏠</span><span>Home</span>
+                </button>
+                <button class="nav-btn" data-target="#about">
+                    <span class="icon">ℹ️</span><span>Tentang</span>
+                </button>
+                <button class="nav-btn" data-target="#history">
+                    <span class="icon">📜</span><span>Sejarah</span>
+                </button>
+                <button class="nav-btn" data-target="#stats">
+                    <span class="icon">📊</span><span>Statistik</span>
+                </button>
+                <button class="nav-btn" data-target="#islands">
+                    <span class="icon">🗺️</span><span>Pulau</span>
+                </button>
+                <button class="nav-btn" data-target="#quiz">
+                    <span class="icon">❓</span><span>Kuis</span>
+                </button>
+            @else
+                {{-- MODE ISLAND: Halaman Pulau (Sumatera, Jawa, dll) --}}
+
+                {{-- Home: balik ke Budaya Indonesia (landing) --}}
+                <button class="nav-btn" data-url="{{ route('home') }}">
+                    <span class="icon">🏠</span><span>Home</span>
+                </button>
+
+                {{-- default aktif: Tentang pulau --}}
+                <button class="nav-btn is-active" data-target="#about">
+                    <span class="icon">ℹ️</span><span>Tentang</span>
+                </button>
+
+                {{-- Cerita daerah (pakai section #history yang berisi sejarah/cerita) --}}
+                <button class="nav-btn" data-target="#history">
+                    <span class="icon">📜</span><span>Cerita</span>
+                </button>
+
+                {{-- Statistik pulau --}}
+                <button class="nav-btn" data-target="#stats">
+                    <span class="icon">📊</span><span>Statistik</span>
+                </button>
+
+                {{-- Destinasi pulau --}}
+                <button class="nav-btn" data-target="#destinations">
+                    <span class="icon">🗺️</span><span>Destinasi</span>
+                </button>
+
+                {{-- Makanan khas pulau --}}
+                <button class="nav-btn" data-target="#foods">
+                    <span class="icon">🍽️</span><span>Makanan</span>
+                </button>
+
+                {{-- Kuis pulau --}}
+                <button class="nav-btn" data-target="#quiz">
+                    <span class="icon">❓</span><span>Kuis</span>
+                </button>
+            @endif
 
             {{-- indikator kapsul aktif (garis/shape bergerak di belakang tombol) --}}
             <span class="active-indicator" aria-hidden="true"></span>
@@ -50,11 +98,26 @@
         </div>
 
         <div class="drawer-links">
-            <a href="#home"    data-target="#home"    class="drawer-link">🏠 Home</a>
-            <a href="#about"   data-target="#about"   class="drawer-link">ℹ️ Tentang</a>
-            <a href="#stats"   data-target="#stats"   class="drawer-link">📊 Statistik</a>
-            <a href="#history" data-target="#history" class="drawer-link">📜 Sejarah</a>
-            <a href="#islands" data-target="#islands" class="drawer-link">🗺️ Pulau</a>
+            @if(!$isIslandMode)
+                {{-- MODE HOME: Budaya Indonesia --}}
+                <a href="#home"    data-target="#home"    class="drawer-link">🏠 Home</a>
+                <a href="#about"   data-target="#about"   class="drawer-link">ℹ️ Tentang</a>
+                <a href="#history" data-target="#history" class="drawer-link">📜 Sejarah</a>
+                <a href="#stats"   data-target="#stats"   class="drawer-link">📊 Statistik</a>
+                <a href="#islands" data-target="#islands" class="drawer-link">🗺️ Pulau</a>
+                <a href="#quiz"    data-target="#quiz"    class="drawer-link">❓ Kuis</a>
+            @else
+                {{-- MODE ISLAND: Pulau --}}
+                {{-- Home: balik ke landing, biar link biasa aja --}}
+                <a href="{{ route('home') }}" class="drawer-link">🏠 Home</a>
+
+                <a href="#about"   data-target="#about"   class="drawer-link">ℹ️ Tentang</a>
+                <a href="#history" data-target="#history" class="drawer-link">📜 Cerita</a>
+                <a href="#stats"   data-target="#stats"   class="drawer-link">📊 Statistik</a>
+                <a href="#destinations" data-target="#destinations" class="drawer-link">🗺️ Destinasi</a>
+                <a href="#foods" data-target="#foods" class="drawer-link">🍽️ Makanan</a>
+                <a href="#quiz" data-target="#quiz" class="drawer-link">❓ Kuis</a>
+            @endif
         </div>
 
         <div class="drawer-footer">

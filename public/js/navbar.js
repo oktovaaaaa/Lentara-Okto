@@ -53,18 +53,27 @@
   if (!isMobile()) moveIndicator(initial); else hideIndicator();
 
   // klik btn → scroll ke section
-  links.forEach(btn => {
-    btn.addEventListener('click', () => {
-      links.forEach(l => l.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      if (!isMobile()) moveIndicator(btn);
+links.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const url = btn.dataset.url;
+    if (url) {
+      // MODE ISLAND: tombol Home → redirect ke Budaya Indonesia
+      window.location.href = url;
+      return;
+    }
 
-      const target = document.querySelector(btn.dataset.target);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
+    // behaviour lama untuk tombol yang scroll ke section
+    links.forEach(l => l.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    if (!isMobile()) moveIndicator(btn);
+
+    const targetSelector = btn.dataset.target;
+    const target = targetSelector ? document.querySelector(targetSelector) : null;
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   });
+});
 
   // update aktif berdasarkan scroll (IntersectionObserver)
   const io = new IntersectionObserver(entries => {
