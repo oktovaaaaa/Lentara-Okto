@@ -13,18 +13,8 @@
     {{-- CSS Navbar --}}
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased">
+<body class="text-slate-100 antialiased">
     <div class="min-h-screen flex flex-col">
-
-        {{-- HEADER BRAND --}}
-        <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
-            <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-                <a href="{{ route('landing') }}" class="font-semibold text-lg text-emerald-300">
-                    Lentara
-                </a>
-                <span class="text-xs text-slate-400">Prototype</span>
-            </div>
-        </header>
 
         {{-- NAVBAR UTAMA --}}
         @include('partials.navbar')

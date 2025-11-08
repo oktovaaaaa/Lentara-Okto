@@ -9,15 +9,16 @@
 @endphp
 
 @section('content')
-    {{-- CSS khusus landing (sementara di sini dulu, nanti bisa dipindah ke file CSS sendiri) --}}
+    {{-- CSS khusus landing (sementara di sini, nanti bisa dipindah ke file CSS sendiri) --}}
     <style>
-        * {
+        /* Scope ke landing saja, supaya tidak mengganggu layout lain */
+        .landing-root * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        body {
+        .landing-root {
             font-family: "Inter", sans-serif;
         }
 
@@ -65,25 +66,49 @@
         .content-title-2 {
             font-family: "Oswald", sans-serif;
         }
+
+        /* ===== POSITIONING JUDUL BESAR (TIDAK GERAK) ===== */
+        .hero-title-wrapper {
+            position: absolute;
+            inset-inline: 0;       /* left: 0 + right: 0 */
+            z-index: 40;           /* di bawah navbar (navbar z-index 60) */
+            pointer-events: none;  /* klik tetap ke kartu / konten di belakang */
+            display: flex;
+        }
+
+        /* HP & layar kecil: judul di tengah (sedikit di atas) */
+        @media (max-width: 768px) {
+            .hero-title-wrapper {
+                position: absolute;
+                top: 28%;                      /* sekitar tengah */
+                transform: translateY(-50%);   /* benar-benar center vertical */
+                justify-content: center;
+                padding-inline: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* Tablet / Desktop: judul di kiri, di sekitar tengah layar */
+        @media (min-width: 769px) {
+            .hero-title-wrapper {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-45%);   /* sedikit di atas tengah */
+                justify-content: flex-start;
+                padding-inline: 3rem;
+                text-align: left;
+            }
+        }
     </style>
 
-    {{-- WRAPPER LANDING --}}
-    <div class="bg-[#1a1a1a] text-white {{ $hasSelected ? '' : 'overflow-hidden' }} relative">
+    {{-- =================== SECTION 1: HERO FULLSCREEN =================== --}}
+<section class="landing-root landing-hero relative h-screen w-full overflow-hidden bg-[#1a1a1a] text-white {{ $hasSelected ? '' : 'overflow-hidden' }}">
 
         <div class="cover"></div>
 
-        {{-- JUDUL BESAR (FIXED) --}}
+        {{-- JUDUL BESAR (FIXED, TIDAK IKUT SCROLL) --}}
         @if($hasSelected)
-            <div
-                class="pointer-events-none fixed z-[150]
-                       inset-x-0
-                       top-16 sm:top-20                {{-- HP & tablet: agak di atas --}}
-                       flex justify-center
-                       px-4 sm:px-6
-                       text-center
-                       md:top-16                        {{-- desktop tetap agak atas kiri --}}
-                       md:justify-start md:text-left
-                       md:px-10">
+            <div class="hero-title-wrapper">
                 <div class="max-w-3xl space-y-2">
                     @if($selectedIsland->place_label)
                         <p class="hero-title-line text-[9px] sm:text-[10px] md:text-xs tracking-[0.3em] uppercase text-white/80">
@@ -110,8 +135,8 @@
             </div>
         @endif
 
-        {{-- AREA ANIMASI KARTU --}}
-        <div id="demo" class="relative w-screen h-screen overflow-hidden"></div>
+        {{-- AREA ANIMASI KARTU (isi seluruh hero) --}}
+        <div id="demo" class="absolute inset-0 overflow-hidden"></div>
 
         {{-- PAGINATION & NOMOR SLIDE --}}
         <div
@@ -127,9 +152,9 @@
         ></div>
 
         <div class="indicator"></div>
-    </div>
+    </section>
 
-    {{-- SECTION BAWAH: ABOUT / HISTORY / DESTINASI / MAKANAN / BUDAYA --}}
+    {{-- =================== SECTION 2: ABOUT / HISTORY / DESTINASI / DLL =================== --}}
     @if($hasSelected)
         <section class="relative z-[10] bg-[#050505] text-white py-12 sm:py-16 px-4 sm:px-6">
             <div class="max-w-5xl mx-auto space-y-12">
@@ -138,6 +163,21 @@
                 <div id="about">
                     <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
                         Tentang {{ $selectedIsland->title ?? $selectedIsland->name }}
+                        <p>p<p>
+                            p<p><p>p</p>
+                        p</p>
+                    p</p>
+                p</p>
+                <p>p<p>
+                            p<p><p>p</p>
+                        p</p>
+                    p</p>
+                p</p>
+                <p>p<p>
+                            p<p><p>p</p>
+                        p</p>
+                    p</p>
+                p</p>
                     </h2>
                     <p class="text-sm sm:text-base text-white/80 leading-relaxed">
                         {{ $selectedIsland->short_description ?? 'Belum ada deskripsi singkat. Tambahkan konten about di database.' }}

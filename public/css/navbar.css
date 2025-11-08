@@ -1,11 +1,14 @@
 /* ========== Navbar Floating ========== */
 .site-header{
-  position: sticky;
+  position: fixed;        /* dulu: sticky -> sekarang fixed supaya tidak dorong konten */
   top: 12px;
+  left: 0;
+  right: 0;
   z-index: 60;
   display: flex;
   justify-content: center;
   padding: 6px;
+  background: transparent;   /* pastikan tidak menambah warna sendiri */
 }
 
 .nav-pill{
