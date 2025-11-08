@@ -1,17 +1,15 @@
 {{-- resources/views/landing.blade.php --}}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lentara Islands</title>
+@extends('layouts.app')
 
-    {{-- Fonts --}}
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500&display=swap" rel="stylesheet">
+@section('title', 'Lentara Islands')
 
-    {{-- Tailwind via CDN --}}
-    <script src="https://cdn.tailwindcss.com"></script>
+@php
+    $hasSelected    = isset($selectedIsland) && $selectedIsland;
+    $featuresByType = $featuresByType ?? [];
+@endphp
 
+@section('content')
+    {{-- CSS khusus landing (sementara di sini dulu, nanti bisa dipindah ke file CSS sendiri) --}}
     <style>
         * {
             box-sizing: border-box;
@@ -68,73 +66,68 @@
             font-family: "Oswald", sans-serif;
         }
     </style>
-</head>
 
-@php
-    $hasSelected    = isset($selectedIsland) && $selectedIsland;
-    $featuresByType = $featuresByType ?? [];
-@endphp
+    {{-- WRAPPER LANDING --}}
+    <div class="bg-[#1a1a1a] text-white {{ $hasSelected ? '' : 'overflow-hidden' }} relative">
 
-<body class="bg-[#1a1a1a] text-white {{ $hasSelected ? '' : 'overflow-hidden' }}">
+        <div class="cover"></div>
 
-    <div class="cover"></div>
+        {{-- JUDUL BESAR (FIXED) --}}
+        @if($hasSelected)
+            <div
+                class="pointer-events-none fixed z-[150]
+                       inset-x-0
+                       top-16 sm:top-20                {{-- HP & tablet: agak di atas --}}
+                       flex justify-center
+                       px-4 sm:px-6
+                       text-center
+                       md:top-16                        {{-- desktop tetap agak atas kiri --}}
+                       md:justify-start md:text-left
+                       md:px-10">
+                <div class="max-w-3xl space-y-2">
+                    @if($selectedIsland->place_label)
+                        <p class="hero-title-line text-[9px] sm:text-[10px] md:text-xs tracking-[0.3em] uppercase text-white/80">
+                            {{ $selectedIsland->place_label }}
+                        </p>
+                    @endif
 
-    {{-- JUDUL BESAR (FIXED) --}}
-    @if($hasSelected)
-    <div
-        class="pointer-events-none fixed z-[150]
-               inset-x-0
-               top-16 sm:top-20                {{-- HP & tablet: agak di atas, bukan di tengah --}}
-               flex justify-center
-               px-4 sm:px-6
-               text-center
-               md:top-16                        {{-- desktop tetap di atas kiri --}}
-               md:justify-start md:text-left
-               md:px-10">
-        <div class="max-w-3xl space-y-2">
-            @if($selectedIsland->place_label)
-                <p class="hero-title-line text-[9px] sm:text-[10px] md:text-xs tracking-[0.3em] uppercase text-white/80">
-                    {{ $selectedIsland->place_label }}
-                </p>
-            @endif
+                    <h1
+                        class="hero-title-line content-title-1
+                               text-3xl sm:text-4xl md:text-6xl lg:text-7xl
+                               font-bold leading-tight sm:leading-none drop-shadow-[0_0_20px_rgba(0,0,0,0.7)]">
+                        {{ strtoupper($selectedIsland->title ?? $selectedIsland->name) }}
+                    </h1>
 
-            <h1
-                class="hero-title-line content-title-1
-                       text-3xl sm:text-4xl md:text-6xl lg:text-7xl
-                       font-bold leading-tight sm:leading-none drop-shadow-[0_0_20px_rgba(0,0,0,0.7)]">
-                {{ strtoupper($selectedIsland->title ?? $selectedIsland->name) }}
-            </h1>
+                    @if($selectedIsland->subtitle)
+                        <p
+                            class="hero-title-line content-title-2
+                                   text-lg sm:text-2xl md:text-3xl lg:text-4xl
+                                   font-semibold text-white drop-shadow-[0_0_20px_rgba(0,0,0,0.7)]">
+                            {{ strtoupper($selectedIsland->subtitle) }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+        @endif
 
-            @if($selectedIsland->subtitle)
-                <p
-                    class="hero-title-line content-title-2
-                           text-lg sm:text-2xl md:text-3xl lg:text-4xl
-                           font-semibold text-white drop-shadow-[0_0_20px_rgba(0,0,0,0.7)]">
-                    {{ strtoupper($selectedIsland->subtitle) }}
-                </p>
-            @endif
+        {{-- AREA ANIMASI KARTU --}}
+        <div id="demo" class="relative w-screen h-screen overflow-hidden"></div>
+
+        {{-- PAGINATION & NOMOR SLIDE --}}
+        <div
+            id="pagination"
+            class="absolute bottom-16 sm:bottom-12 left-1/2 -translate-x-1/2 flex gap-2 text-white text-xs sm:text-sm"
+        >
+            <div class="progress-sub-foreground"></div>
         </div>
+
+        <div
+            id="slide-numbers"
+            class="absolute bottom-8 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 text-[14px] sm:text-[18px]"
+        ></div>
+
+        <div class="indicator"></div>
     </div>
-@endif
-    
-
-    {{-- AREA ANIMASI KARTU --}}
-    <div id="demo" class="relative w-screen h-screen overflow-hidden"></div>
-
-    {{-- PAGINATION & NOMOR SLIDE --}}
-    <div
-        id="pagination"
-        class="absolute bottom-16 sm:bottom-12 left-1/2 -translate-x-1/2 flex gap-2 text-white text-xs sm:text-sm"
-    >
-        <div class="progress-sub-foreground"></div>
-    </div>
-
-    <div
-        id="slide-numbers"
-        class="absolute bottom-8 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 text-[14px] sm:text-[18px]"
-    ></div>
-
-    <div class="indicator"></div>
 
     {{-- SECTION BAWAH: ABOUT / HISTORY / DESTINASI / MAKANAN / BUDAYA --}}
     @if($hasSelected)
@@ -195,7 +188,7 @@
                                     @if($dest->image_url)
                                         <img
                                             src="{{ $dest->image_url }}"
-                                            alt="{{ $dest->title }}
+                                            alt="{{ $dest->title }}"
                                             class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-white/10 flex-shrink-0">
                                     @endif
                                     <div>
@@ -267,7 +260,9 @@
             </div>
         </section>
     @endif
+@endsection
 
+@push('scripts')
     {{-- GSAP --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
@@ -515,5 +510,4 @@
 
         start();
     </script>
-</body>
-</html>
+@endpush
