@@ -52,9 +52,8 @@
 }
 .brand-text{ letter-spacing: .2px; }
 
-/* tombol ganti tema */
+
 .theme-toggle{
-  margin-left: auto;
   border: 1px solid var(--line, #e9e1d6);
   background: var(--card, #ffffff);
   border-radius: 999px;
@@ -65,6 +64,9 @@
   gap: 6px;
   font-size: 16px;
 }
+
+
+
 .theme-toggle .sun{ display: inline; }
 .theme-toggle .moon{ display: none; }
 html[data-theme="dark"] .theme-toggle .sun{ display: none; }

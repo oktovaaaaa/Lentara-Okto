@@ -205,17 +205,17 @@
                     </p>
                 </section>
 
-                {{-- STATISTIK INDONESIA --}}
+                {{-- STATISTIK INDONESIA (SIMPLE IMAGE DULU) --}}
                 <section id="stats">
                     <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
                         Statistik Budaya
                     </h2>
                     <img
-            src="https://www.finereport.com/en/wp-content/uploads/2020/03/2019071010A.png"
-            alt="Contoh grafik statistik"
-            class="max-w-3xl w-full rounded-xl border border-white/10 shadow-lg"
-        >
-                    <p class="text-sm sm:text-base text-white/80 leading-relaxed">
+                        src="https://www.finereport.com/en/wp-content/uploads/2020/03/2019071010A.png"
+                        alt="Contoh grafik statistik"
+                        class="max-w-3xl w-full rounded-xl border border-white/10 shadow-lg"
+                    >
+                    <p class="text-sm sm:text-base text-white/80 leading-relaxed mt-3">
                         Placeholder statistik: jumlah pulau, jumlah suku, bahasa daerah, dan lain-lain. Nantinya bisa
                         dihubungkan ke data dinamis jika diperlukan.
                     </p>
@@ -308,86 +308,159 @@
                     </section>
                 @endif
 
-               {{-- STATISTIK --}}
-<div id="stats" class="mt-10">
-    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
-        Statistik {{ $selectedIsland->title ?? $selectedIsland->name }}
-    </h2>
+                {{-- STATISTIK ISLAND: DASHBOARD COMPACT --}}
+                <div id="stats" class="mt-10">
+                    <div class="bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 shadow-[0_18px_45px_rgba(0,0,0,0.45)] space-y-6">
 
-    {{-- Card jumlah penduduk --}}
-    <div class="grid sm:grid-cols-3 gap-4 mb-6">
-        <div class="border border-white/10 rounded-2xl p-4 bg-white/5">
-            <p class="text-xs text-white/60 uppercase tracking-[0.2em]">Jumlah Penduduk</p>
-            <p class="mt-2 text-2xl font-semibold">
-                {{ $selectedIsland->population ? number_format($selectedIsland->population, 0, ',', '.') : '—' }}
-            </p>
-            <p class="text-[11px] text-white/40 mt-1">Perkiraan total penduduk pulau ini.</p>
-        </div>
-    </div>
-
-    <div class="space-y-8">
-        {{-- AGAMA --}}
-        <div>
-            <h3 class="text-lg font-semibold mb-2">Agama</h3>
-            <div class="grid sm:grid-cols-2 gap-4">
-                <div class="text-xs space-y-1">
-                    @forelse($demographics['religion'] as $row)
-                        <div class="flex justify-between">
-                            <span>{{ $row->label }}</span>
-                            <span>{{ $row->percentage }}%</span>
+                        {{-- HEADER --}}
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold">
+                                    Statistik {{ $selectedIsland->title ?? $selectedIsland->name }}
+                                </h2>
+                                <p class="text-xs sm:text-sm text-white/60 mt-1">
+                                    Gambaran singkat penduduk, agama, suku, dan bahasa di pulau ini.
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/30 border border-white/10 text-xs sm:text-sm">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>Data budaya aktif</span>
+                            </div>
                         </div>
-                    @empty
-                        <p class="text-white/50">Belum ada data agama.</p>
-                    @endforelse
-                </div>
-                <div class="h-52">
-                    <canvas id="islandReligionChart"></canvas>
-                </div>
-            </div>
-        </div>
 
-        {{-- SUKU --}}
-        <div>
-            <h3 class="text-lg font-semibold mb-2">Suku</h3>
-            <div class="grid sm:grid-cols-2 gap-4">
-                <div class="text-xs space-y-1">
-                    @forelse($demographics['ethnicity'] as $row)
-                        <div class="flex justify-between">
-                            <span>{{ $row->label }}</span>
-                            <span>{{ $row->percentage }}%</span>
+                        {{-- TOP METRICS --}}
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            {{-- Penduduk --}}
+                            <div class="rounded-2xl bg-black/40 border border-white/10 p-4 flex flex-col justify-between">
+                                <p class="text-[10px] uppercase tracking-[0.22em] text-white/50">
+                                    Jumlah Penduduk
+                                </p>
+                                <p class="mt-2 text-2xl font-semibold">
+                                    {{ $selectedIsland->population ? number_format($selectedIsland->population, 0, ',', '.') : '—' }}
+                                </p>
+                                <p class="mt-1 text-[11px] text-white/40">
+                                    Perkiraan total penduduk di pulau ini.
+                                </p>
+                            </div>
+
+                            {{-- Banyak Agama --}}
+                            <div class="rounded-2xl bg-black/40 border border-white/10 p-4 flex flex-col justify-between">
+                                <p class="text-[10px] uppercase tracking-[0.22em] text-white/50">
+                                    Ragam Agama
+                                </p>
+                                <p class="mt-2 text-2xl font-semibold">
+                                    {{ !empty($demographics['religion']) ? $demographics['religion']->count() : 0 }}
+                                </p>
+                                <p class="mt-1 text-[11px] text-white/40">
+                                    Jumlah agama yang tercatat di statistik.
+                                </p>
+                            </div>
+
+                            {{-- Banyak Suku --}}
+                            <div class="rounded-2xl bg-black/40 border border-white/10 p-4 flex flex-col justify-between">
+                                <p class="text-[10px] uppercase tracking-[0.22em] text-white/50">
+                                    Ragam Suku
+                                </p>
+                                <p class="mt-2 text-2xl font-semibold">
+                                    {{ !empty($demographics['ethnicity']) ? $demographics['ethnicity']->count() : 0 }}
+                                </p>
+                                <p class="mt-1 text-[11px] text-white/40">
+                                    Suku utama yang mewakili kebudayaan lokal.
+                                </p>
+                            </div>
+
+                            {{-- Banyak Bahasa --}}
+                            <div class="rounded-2xl bg-black/40 border border-white/10 p-4 flex flex-col justify-between">
+                                <p class="text-[10px] uppercase tracking-[0.22em] text-white/50">
+                                    Bahasa Daerah
+                                </p>
+                                <p class="mt-2 text-2xl font-semibold">
+                                    {{ !empty($demographics['language']) ? $demographics['language']->count() : 0 }}
+                                </p>
+                                <p class="mt-1 text-[11px] text-white/40">
+                                    Bahasa daerah yang umum digunakan.
+                                </p>
+                            </div>
                         </div>
-                    @empty
-                        <p class="text-white/50">Belum ada data suku.</p>
-                    @endforelse
-                </div>
-                <div class="h-52">
-                    <canvas id="islandEthnicityChart"></canvas>
-                </div>
-            </div>
-        </div>
 
-        {{-- BAHASA --}}
-        <div>
-            <h3 class="text-lg font-semibold mb-2">Bahasa Daerah</h3>
-            <div class="grid sm:grid-cols-2 gap-4">
-                <div class="text-xs space-y-1">
-                    @forelse($demographics['language'] as $row)
-                        <div class="flex justify-between">
-                            <span>{{ $row->label }}</span>
-                            <span>{{ $row->percentage }}%</span>
+                        {{-- CHART GRID (3 KOTAK) --}}
+                        <div class="grid lg:grid-cols-3 gap-4">
+
+                            {{-- AGAMA (PIE) --}}
+                            <div class="rounded-2xl bg-black/40 border border-white/10 p-4 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-sm font-semibold">Komposisi Agama</h3>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
+                                        Pie chart
+                                    </span>
+                                </div>
+                                <div class="flex-1 flex gap-3">
+                                    <div class="flex-1 h-40">
+                                        <canvas id="islandReligionChart"></canvas>
+                                    </div>
+                                    <div class="w-28 text-[11px] space-y-1 hidden sm:block">
+                                        @forelse($demographics['religion'] as $row)
+                                            <div class="flex justify-between gap-1">
+                                                <span class="truncate">{{ $row->label }}</span>
+                                                <span>{{ $row->percentage }}%</span>
+                                            </div>
+                                        @empty
+                                            <p class="text-white/50">Belum ada data.</p>
+                                        @endforelse
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- SUKU (DOUGHNUT) --}}
+                            <div class="rounded-2xl bg-black/40 border border-white/10 p-4 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-sm font-semibold">Sebaran Suku</h3>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300">
+                                        Doughnut
+                                    </span>
+                                </div>
+                                <div class="flex-1 flex gap-3">
+                                    <div class="flex-1 h-40">
+                                        <canvas id="islandEthnicityChart"></canvas>
+                                    </div>
+                                    <div class="w-28 text-[11px] space-y-1 hidden sm:block">
+                                        @forelse($demographics['ethnicity'] as $row)
+                                            <div class="flex justify-between gap-1">
+                                                <span class="truncate">{{ $row->label }}</span>
+                                                <span>{{ $row->percentage }}%</span>
+                                            </div>
+                                        @empty
+                                            <p class="text-white/50">Belum ada data.</p>
+                                        @endforelse
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- BAHASA (BAR) --}}
+                            <div class="rounded-2xl bg-black/40 border border-white/10 p-4 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-sm font-semibold">Bahasa Daerah</h3>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300">
+                                        Bar chart
+                                    </span>
+                                </div>
+                                <div class="flex-1 h-40">
+                                    <canvas id="islandLanguageChart"></canvas>
+                                </div>
+                                <div class="mt-2 text-[11px] text-white/50">
+                                    @if(!empty($demographics['language']) && $demographics['language']->count())
+                                        <span class="hidden sm:inline">
+                                            Menampilkan persentase beberapa bahasa utama.
+                                        </span>
+                                    @else
+                                        Belum ada data bahasa.
+                                    @endif
+                                </div>
+                            </div>
+
                         </div>
-                    @empty
-                        <p class="text-white/50">Belum ada data bahasa.</p>
-                    @endforelse
+                    </div>
                 </div>
-                <div class="h-56">
-                    <canvas id="islandLanguageChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
                 {{-- DESTINASI --}}
                 @if(!empty($featuresByType['destination']) && $featuresByType['destination']->count())
@@ -783,12 +856,12 @@
     <script>
         // ================== CHART STATISTIK PULAU ==================
         document.addEventListener('DOMContentLoaded', () => {
-            // Data dari Laravel (Collection -> array JSON)
             const religionRows  = @json($demographics['religion'] ?? []);
             const ethnicityRows = @json($demographics['ethnicity'] ?? []);
             const languageRows  = @json($demographics['language'] ?? []);
 
-            function makePieChart(canvasId, rows) {
+            // chart lingkaran (bisa pie / doughnut)
+            function makeCircleChart(canvasId, rows, type = 'pie') {
                 const canvas = document.getElementById(canvasId);
                 if (!canvas || !rows.length) return;
 
@@ -797,14 +870,15 @@
                 const data   = rows.map(r => r.percentage);
 
                 new Chart(ctx, {
-                    type: 'pie',
+                    type: type, // 'pie' atau 'doughnut'
                     data: {
                         labels,
                         datasets: [{
                             data,
                             backgroundColor: [
                                 '#FF6384', '#36A2EB', '#FFCE56',
-                                '#4BC0C0', '#9966FF', '#FF9F40'
+                                '#4BC0C0', '#9966FF', '#FF9F40',
+                                '#FFCD56', '#C9CBCF'
                             ],
                             borderWidth: 1,
                         }]
@@ -812,16 +886,23 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        cutout: type === 'doughnut' ? '60%' : 0, // bolong tengah kalau doughnut
                         plugins: {
                             legend: {
-                                position: 'bottom',
+                                position: 'right',
                                 labels: { usePointStyle: true }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `${ctx.label}: ${ctx.parsed}%`
+                                }
                             }
                         }
                     }
                 });
             }
 
+            // bar chart bahasa
             function makeBarChart(canvasId, rows) {
                 const canvas = document.getElementById(canvasId);
                 if (!canvas || !rows.length) return;
@@ -856,10 +937,20 @@
                 });
             }
 
-            // Render chart jika ada datanya
-            if (religionRows.length)  makePieChart('islandReligionChart', religionRows);
-            if (ethnicityRows.length) makePieChart('islandEthnicityChart', ethnicityRows);
-            if (languageRows.length)  makeBarChart('islandLanguageChart', languageRows);
+            // AGAMA → PIE
+            if (religionRows.length) {
+                makeCircleChart('islandReligionChart', religionRows, 'pie');
+            }
+
+            // SUKU → DOUGHNUT (DONAT)
+            if (ethnicityRows.length) {
+                makeCircleChart('islandEthnicityChart', ethnicityRows, 'doughnut');
+            }
+
+            // BAHASA → BAR
+            if (languageRows.length) {
+                makeBarChart('islandLanguageChart', languageRows);
+            }
         });
     </script>
     @endif

@@ -6,6 +6,7 @@
 @endphp
 
 <header class="site-header" id="top">
+    {{-- ===== NAVBAR UTAMA (desktop + trigger mobile) ===== --}}
     <nav class="nav-pill" role="navigation" aria-label="Navigasi utama">
         {{-- Tombol hamburger (mobile) --}}
         <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-controls="drawer" aria-expanded="false">
@@ -53,7 +54,7 @@
                     <span class="icon">ℹ️</span><span>Tentang</span>
                 </button>
 
-                {{-- Cerita daerah (pakai section #history yang berisi sejarah/cerita) --}}
+                {{-- Cerita daerah --}}
                 <button class="nav-btn" data-target="#history">
                     <span class="icon">📜</span><span>Cerita</span>
                 </button>
@@ -83,17 +84,27 @@
             <span class="active-indicator" aria-hidden="true"></span>
         </div>
 
-        {{-- Tombol ganti tema (light/dark) --}}
-        <button class="theme-toggle" id="themeToggle" aria-label="Ubah tema">
-            <span class="sun">☀️</span>
-            <span class="moon">🌙</span>
-        </button>
+        {{-- Kanan: tombol Admin + toggle tema --}}
+        <div class="flex items-center gap-2 ml-auto">
+            {{-- Link Admin (desktop) --}}
+            <a href="{{ route('login') }}"
+               class="hidden sm:inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded-full border border-amber-300/60 bg-amber-400/90 text-slate-900 shadow-sm hover:bg-amber-300 transition">
+                <span>🛠️</span><span>Admin</span>
+            </a>
+
+            {{-- Tombol ganti tema (light/dark) --}}
+            <button class="theme-toggle" id="themeToggle" aria-label="Ubah tema">
+                <span class="sun">☀️</span>
+                <span class="moon">🌙</span>
+            </button>
+        </div>
     </nav>
 
-    {{-- Drawer / sidebar untuk mobile --}}
+    {{-- ===== DRAWER / SIDEBAR MOBILE ===== --}}
     <aside class="drawer" id="drawer" aria-hidden="true">
         <div class="drawer-header">
             <div class="drawer-brand">🧭 Piforrr7</div>
+            {{-- Tombol X untuk menutup drawer --}}
             <button id="closeDrawer" class="close-drawer" aria-label="Tutup menu">✕</button>
         </div>
 
@@ -108,9 +119,7 @@
                 <a href="#quiz"    data-target="#quiz"    class="drawer-link">❓ Kuis</a>
             @else
                 {{-- MODE ISLAND: Pulau --}}
-                {{-- Home: balik ke landing, biar link biasa aja --}}
                 <a href="{{ route('home') }}" class="drawer-link">🏠 Home</a>
-
                 <a href="#about"   data-target="#about"   class="drawer-link">ℹ️ Tentang</a>
                 <a href="#history" data-target="#history" class="drawer-link">📜 Cerita</a>
                 <a href="#stats"   data-target="#stats"   class="drawer-link">📊 Statistik</a>
@@ -122,8 +131,14 @@
 
         <div class="drawer-footer">
             <button class="btn full" id="drawerTheme">Ganti Tema</button>
+
+            {{-- Link Admin (mobile) --}}
+            <a href="{{ route('login') }}" class="btn full mt-2">
+                🛠️ Admin
+            </a>
         </div>
     </aside>
 
+    {{-- Overlay gelap saat drawer terbuka --}}
     <div id="drawerOverlay" class="drawer-overlay" aria-hidden="true"></div>
 </header>

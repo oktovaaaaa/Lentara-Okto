@@ -6,6 +6,14 @@ use App\Models\Island;
 
 class IslandController extends Controller
 {
+
+    public function index()
+{
+    $islands = Island::orderBy('order')->get();
+
+    return view('admin.stats.index', compact('islands'));
+}
+
 public function landing()
 {
     $islands = Island::query()
