@@ -15,7 +15,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: color-mix(in oklab, var(--card, #ffffff) 85%, transparent);
+  /* background lama: color-mix(in oklab, var(--card, #ffffff) 85%, transparent); */
+  background: transparent;   /* navbar jadi transparan */
   backdrop-filter: blur(12px);
   border: 1px solid var(--line, #e9e1d6);
   border-radius: 999px;
@@ -52,7 +53,6 @@
 }
 .brand-text{ letter-spacing: .2px; }
 
-
 .theme-toggle{
   border: 1px solid var(--line, #e9e1d6);
   background: var(--card, #ffffff);
@@ -65,8 +65,6 @@
   font-size: 16px;
 }
 
-
-
 .theme-toggle .sun{ display: inline; }
 .theme-toggle .moon{ display: none; }
 html[data-theme="dark"] .theme-toggle .sun{ display: none; }
@@ -78,12 +76,21 @@ html[data-theme="dark"] .theme-toggle .moon{ display: inline; }
   display: flex;
   align-items: center;
   gap: 6px;
-  background:#fff7ed;
+  /* background lama: #fff7ed / #1a252b */
+  background: transparent;     /* transparan selalu */
   border-radius: 999px;
   padding: 6px;
-  overflow: hidden;
+  transition: background .2s ease;
 }
-html[data-theme="dark"] .nav-links{ background:#1a252b; }
+html[data-theme="dark"] .nav-links{ background: transparent; }
+
+/* ketika sudah memilih pulau → tetap transparan (class ini sekarang redundant tapi aman) */
+.nav-links.nav-links--transparent{
+  background: transparent;
+}
+html[data-theme="dark"] .nav-links.nav-links--transparent{
+  background: transparent;
+}
 
 .nav-btn{
   appearance: none;
@@ -99,8 +106,13 @@ html[data-theme="dark"] .nav-links{ background:#1a252b; }
   gap: 8px;
   position: relative;
   z-index: 2;
+  transition: color .18s ease, background .18s ease, padding .18s ease;
 }
 .nav-btn.is-active{ color: var(--txt, #1b1b1b); }
+
+html[data-theme="dark"] .nav-btn.is-active{
+  color:#e5e7eb;
+}
 
 .active-indicator{
   position: absolute;
@@ -112,6 +124,92 @@ html[data-theme="dark"] .nav-links{ background:#1a252b; }
   transition: transform .35s cubic-bezier(.2,.8,.2,1), width .3s, opacity .3s;
   pointer-events: none;
   opacity: 0;
+}
+
+/* ===== DROPDOWN DI DALAM NAVBAR (desktop) ===== */
+.nav-dropdown{
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-dropdown-toggle{
+  display:flex;
+  align-items:center;
+}
+
+.nav-dropdown-toggle .chevron{
+  font-size: 11px;
+  margin-left: 2px;
+  transform-origin: center;
+  transition: transform .2s ease;
+}
+
+.nav-dropdown.open .nav-dropdown-toggle .chevron{
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-menu{
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 8px;
+  min-width: 170px;
+
+  /* transparent / glass */
+  background: rgba(15, 23, 42, 0.25);         /* biru gelap transparan */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.55);
+  box-shadow: 0 20px 40px rgba(0,0,0,.25);
+  padding: 6px;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity .18s ease-out, transform .18s ease-out;
+  z-index: 80;
+}
+
+/* dark mode dropdown – tetap transparan, cuma sedikit lebih gelap */
+html[data-theme="dark"] .nav-dropdown-menu{
+  background: rgba(15, 23, 42, 0.45);
+  border-color: rgba(148,163,184,0.7);
+}
+
+.dropdown-item{
+  display: block;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--txt, #1b1b1b);
+  white-space: nowrap;
+}
+
+html[data-theme="dark"] .dropdown-item{
+  color:#e5e7eb;
+}
+
+.dropdown-item:hover{
+  background: color-mix(in oklab, var(--brand, #b7410e) 10%, transparent);
+}
+
+/* ketika dropdown dibuka */
+.nav-dropdown.open .nav-dropdown-menu{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* state: ketika pulau sudah dipilih → tombol dropdown dibikin lebih besar / standout */
+.nav-dropdown.nav-dropdown--selected .nav-dropdown-toggle{
+  padding-inline: 18px;
+  padding-block: 12px;
+  background: color-mix(in oklab, var(--brand, #b7410e) 12%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--brand, #b7410e) 35%, transparent),
+    0 10px 30px rgba(0,0,0,.18);
 }
 
 /* Hamburger + Drawer (mobile) */
@@ -190,6 +288,20 @@ html[data-theme="dark"] .nav-links{ background:#1a252b; }
 }
 .drawer-footer{ margin-top:auto; }
 .btn.full{ width:100%; }
+
+/* drawer sub menu untuk pulau-pulau */
+.drawer-subgroup{
+  margin-left: 10px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  border-left: 2px solid rgba(148,163,184,0.4);
+  padding-left: 8px;
+}
+
+.drawer-sublink{
+  font-size: 14px;
+  opacity: .9;
+}
 
 /* responsive: di mobile tampil hamburger, sembunyikan nav-links */
 @media (max-width: 860px){

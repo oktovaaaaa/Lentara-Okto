@@ -52,28 +52,29 @@
   const initial = document.querySelector('.nav-btn.is-active') || links[0];
   if (!isMobile()) moveIndicator(initial); else hideIndicator();
 
-  // klik btn → scroll ke section
-links.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const url = btn.dataset.url;
-    if (url) {
-      // MODE ISLAND: tombol Home → redirect ke Budaya Indonesia
-      window.location.href = url;
-      return;
-    }
+  // klik btn → scroll ke section / redirect Home (mode island)
+  links.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const url = btn.dataset.url;
+      if (url) {
+        // MODE ISLAND: tombol Home → redirect ke Budaya Indonesia
+        window.location.href = url;
+        return;
+      }
 
-    // behaviour lama untuk tombol yang scroll ke section
-    links.forEach(l => l.classList.remove('is-active'));
-    btn.classList.add('is-active');
-    if (!isMobile()) moveIndicator(btn);
+      // behaviour lama untuk tombol yang scroll ke section
+      const targetSelector = btn.dataset.target;
+      const target = targetSelector ? document.querySelector(targetSelector) : null;
 
-    const targetSelector = btn.dataset.target;
-    const target = targetSelector ? document.querySelector(targetSelector) : null;
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+      links.forEach(l => l.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      if (!isMobile()) moveIndicator(btn);
+
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   });
-});
 
   // update aktif berdasarkan scroll (IntersectionObserver)
   const io = new IntersectionObserver(entries => {
@@ -92,6 +93,82 @@ links.forEach(btn => {
 
   document.querySelectorAll('section').forEach(sec => io.observe(sec));
 
+  // ===== DROPDOWN "PULAU" DI NAVBAR DESKTOP =====
+  const dropdowns = document.querySelectorAll('.nav-dropdown');
+
+  function closeAllDropdowns() {
+    dropdowns.forEach(drop => {
+      drop.classList.remove('open');
+      const toggle = drop.querySelector('.nav-dropdown-toggle');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  dropdowns.forEach(drop => {
+    const toggle = drop.querySelector('.nav-dropdown-toggle');
+    const menu = drop.querySelector('.nav-dropdown-menu');
+    const labelSpan = drop.querySelector('.dropdown-label');
+    if (!toggle || !menu) return;
+
+    // ==== INITIAL STATE dari Blade (selectedIsland) ====
+    const currentIsland = drop.dataset.currentIsland;
+    if (currentIsland && labelSpan) {
+      labelSpan.textContent = currentIsland;
+      drop.classList.add('nav-dropdown--selected');
+      if (navLinksBox) {
+        navLinksBox.classList.add('nav-links--transparent');
+      }
+    }
+
+    // klik tombol "Pulau" → buka/tutup dropdown
+    toggle.addEventListener('click', (e) => {
+      // biar nggak ikut klik di luar / dokumen
+      e.stopPropagation();
+      const willOpen = !drop.classList.contains('open');
+      closeAllDropdowns();
+      if (willOpen) {
+        drop.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // klik item di dropdown → ubah label, besarkan tombol, transparan, lalu redirect
+    menu.querySelectorAll('.dropdown-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const islandName = item.dataset.island || item.textContent.trim();
+        const url = item.dataset.url;
+
+        if (labelSpan && islandName) {
+          labelSpan.textContent = islandName;
+        }
+
+        // tandai dropdown sudah memilih pulau → CSS akan membesarkan tombol
+        drop.classList.add('nav-dropdown--selected');
+
+        // jadikan kapsul nav-links transparan (walaupun sekarang memang sudah transparan)
+        if (navLinksBox) {
+          navLinksBox.classList.add('nav-links--transparent');
+        }
+
+        // tutup dropdown
+        drop.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+
+        // redirect ke halaman pulau
+        if (url) {
+          window.location.href = url;
+        }
+      });
+    });
+  });
+
+  // klik area luar navbar → tutup semua dropdown
+  document.addEventListener('click', () => {
+    closeAllDropdowns();
+  });
+
   // ===== MOBILE DRAWER =====
   function openDrawer() {
     drawer.classList.add('open');
@@ -104,8 +181,10 @@ links.forEach(btn => {
   function closeDrawer() {
     drawer.classList.remove('open');
     overlay.classList.remove('show');
-    hamburger.classList.remove('is-open');
-    hamburger.setAttribute('aria-expanded', 'false');
+    if (hamburger) {
+      hamburger.classList.remove('is-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
     drawer.setAttribute('aria-hidden', 'true');
   }
 
@@ -124,13 +203,27 @@ links.forEach(btn => {
     if (e.key === 'Escape') closeDrawer();
   });
 
-  // klik link di drawer → scroll + tutup drawer
+  // klik link di drawer → bisa scroll (kalau #anchor) atau redirect (kalau data-url)
   document.querySelectorAll('.drawer-link').forEach(a => {
-    a.addEventListener('click', () => {
-      const target = document.querySelector(a.dataset.target || a.getAttribute('href'));
+    a.addEventListener('click', (e) => {
+      const url = a.dataset.url;
+
+      if (url) {
+        e.preventDefault();
+        window.location.href = url;
+        closeDrawer();
+        return;
+      }
+
+      const targetSelector = a.dataset.target || a.getAttribute('href');
+      const isHash = targetSelector && targetSelector.startsWith('#');
+      const target = isHash ? document.querySelector(targetSelector) : null;
+
       if (target) {
+        e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
+
       closeDrawer();
     });
   });

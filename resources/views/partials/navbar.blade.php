@@ -2,7 +2,17 @@
 
 @php
     // Mode island = kalau ada $selectedIsland (halaman pulau Sumatera, Jawa, dll)
-    $isIslandMode = isset($selectedIsland) && $selectedIsland;
+    $isIslandMode       = isset($selectedIsland) && $selectedIsland;
+    $currentIslandName  = $isIslandMode ? ($selectedIsland->title ?? $selectedIsland->name) : null;
+
+    // daftar pulau untuk dropdown navbar
+    $dropdownIslands = [
+        ['name' => 'Sumatera',   'slug' => 'sumatera'],
+        ['name' => 'Jawa',       'slug' => 'jawa'],
+        ['name' => 'Kalimantan', 'slug' => 'kalimantan'],
+        ['name' => 'Sulawesi',   'slug' => 'sulawesi'],
+        ['name' => 'Papua',      'slug' => 'papua'],
+    ];
 @endphp
 
 <header class="site-header" id="top">
@@ -26,18 +36,59 @@
                 <button class="nav-btn is-active" data-target="#home">
                     <span class="icon">🏠</span><span>Home</span>
                 </button>
+
                 <button class="nav-btn" data-target="#about">
                     <span class="icon">ℹ️</span><span>Tentang</span>
                 </button>
+
                 <button class="nav-btn" data-target="#history">
                     <span class="icon">📜</span><span>Sejarah</span>
                 </button>
+
                 <button class="nav-btn" data-target="#stats">
                     <span class="icon">📊</span><span>Statistik</span>
                 </button>
-                <button class="nav-btn" data-target="#islands">
-                    <span class="icon">🗺️</span><span>Pulau</span>
-                </button>
+
+                {{-- Pulau + dropdown daftar pulau (Sumatera, Jawa, dll) --}}
+                <div
+                    class="nav-dropdown"
+                    data-dropdown="islands"
+                    @if($currentIslandName)
+                        data-current-island="{{ $currentIslandName }}"
+                    @endif
+                >
+                    <button
+                        class="nav-btn nav-dropdown-toggle"
+                        type="button"
+                        data-target="#islands"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <span class="icon">🗺️</span>
+                        <span class="dropdown-label">
+                            Pulau
+                        </span>
+                        <span class="chevron">▾</span>
+                    </button>
+
+                    <div class="nav-dropdown-menu" role="menu">
+                        @foreach($dropdownIslands as $island)
+                            @php
+                                $url = url('/islands/'.$island['slug']);
+                            @endphp
+                            <a href="{{ $url }}"
+                               class="dropdown-item"
+                               role="menuitem"
+                               data-island="{{ $island['name'] }}"
+                               data-url="{{ $url }}">
+                                {{ $island['name'] }}
+                                {{-- contoh kalau mau pakai route name:
+                                     href="{{ route('islands.show', $island['slug']) }}" --}}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
                 <button class="nav-btn" data-target="#quiz">
                     <span class="icon">❓</span><span>Kuis</span>
                 </button>
@@ -63,6 +114,43 @@
                 <button class="nav-btn" data-target="#stats">
                     <span class="icon">📊</span><span>Statistik</span>
                 </button>
+
+                {{-- DROPDOWN PULAU JUGA TAMPIL DI MODE ISLAND --}}
+                <div
+                    class="nav-dropdown"
+                    data-dropdown="islands"
+                    @if($currentIslandName)
+                        data-current-island="{{ $currentIslandName }}"
+                    @endif
+                >
+                    <button
+                        class="nav-btn nav-dropdown-toggle"
+                        type="button"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <span class="icon">🗺️</span>
+                        <span class="dropdown-label">
+                            {{ $currentIslandName ?? 'Pulau' }}
+                        </span>
+                        <span class="chevron">▾</span>
+                    </button>
+
+                    <div class="nav-dropdown-menu" role="menu">
+                        @foreach($dropdownIslands as $island)
+                            @php
+                                $url = url('/islands/'.$island['slug']);
+                            @endphp
+                            <a href="{{ $url }}"
+                               class="dropdown-item"
+                               role="menuitem"
+                               data-island="{{ $island['name'] }}"
+                               data-url="{{ $url }}">
+                                {{ $island['name'] }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
 
                 {{-- Destinasi pulau --}}
                 <button class="nav-btn" data-target="#destinations">
@@ -115,7 +203,23 @@
                 <a href="#about"   data-target="#about"   class="drawer-link">ℹ️ Tentang</a>
                 <a href="#history" data-target="#history" class="drawer-link">📜 Sejarah</a>
                 <a href="#stats"   data-target="#stats"   class="drawer-link">📊 Statistik</a>
+
+                {{-- Pulau + sub menu pulau-pulau (mobile) --}}
                 <a href="#islands" data-target="#islands" class="drawer-link">🗺️ Pulau</a>
+                <div class="drawer-subgroup">
+                    @foreach($dropdownIslands as $island)
+                        @php
+                            $url = url('/islands/'.$island['slug']);
+                        @endphp
+                        <a href="{{ $url }}"
+                           class="drawer-link drawer-sublink"
+                           data-url="{{ $url }}"
+                           data-island="{{ $island['name'] }}">
+                            • {{ $island['name'] }}
+                        </a>
+                    @endforeach
+                </div>
+
                 <a href="#quiz"    data-target="#quiz"    class="drawer-link">❓ Kuis</a>
             @else
                 {{-- MODE ISLAND: Pulau --}}
@@ -126,6 +230,21 @@
                 <a href="#destinations" data-target="#destinations" class="drawer-link">🗺️ Destinasi</a>
                 <a href="#foods" data-target="#foods" class="drawer-link">🍽️ Makanan</a>
                 <a href="#quiz" data-target="#quiz" class="drawer-link">❓ Kuis</a>
+
+                {{-- Submenu pulau di bawah juga boleh ditambah kalau mau konsisten --}}
+                <div class="drawer-subgroup">
+                    @foreach($dropdownIslands as $island)
+                        @php
+                            $url = url('/islands/'.$island['slug']);
+                        @endphp
+                        <a href="{{ $url }}"
+                           class="drawer-link drawer-sublink"
+                           data-url="{{ $url }}"
+                           data-island="{{ $island['name'] }}">
+                            • {{ $island['name'] }}
+                        </a>
+                    @endforeach
+                </div>
             @endif
         </div>
 

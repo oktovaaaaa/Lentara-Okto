@@ -221,31 +221,7 @@
                     </p>
                 </section>
 
-                {{-- DAFTAR PULAU (ISLANDS) --}}
-                <section id="islands">
-                    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
-                        Pulau-Pulau Utama
-                    </h2>
-                    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        @foreach($carouselData as $item)
-                            <button
-                                onclick="window.location.href='/islands/{{ $item['slug'] }}'"
-                                class="text-left border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition"
-                            >
-                                <div class="h-28 w-full bg-cover bg-center"
-                                     style="background-image: url('{{ $item['image'] }}')"></div>
-                                <div class="p-3">
-                                    <div class="text-xs uppercase tracking-[0.2em] text-white/60">
-                                        {{ $item['place'] ?? 'Pulau' }}
-                                    </div>
-                                    <div class="text-sm font-semibold">
-                                        {{ $item['title2'] ?? $item['slug'] }}
-                                    </div>
-                                </div>
-                            </button>
-                        @endforeach
-                    </div>
-                </section>
+                {{-- ⚠️ BAGIAN PULAU (ISLANDS) DIHAPUS SESUAI PERMINTAAN --}}
 
                 {{-- QUIZ INDONESIA --}}
                 <section id="quiz">
@@ -598,7 +574,7 @@
                   <div class="content-title-1 text-[22px] sm:text-[26px] leading-none">
                     ${i.title ?? ''}
                   </div>
-                  <div class="content-title-2 text-[18px] sm:text-[22px] leading-none">
+                  <div class="content-title-2 text-[18px] sm:text[22px] leading-none">
                     ${i.title2 ?? ''}
                   </div>
                 </div>
