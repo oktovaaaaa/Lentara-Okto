@@ -203,14 +203,14 @@ html[data-theme="dark"] .dropdown-item{
 }
 
 /* state: ketika pulau sudah dipilih → tombol dropdown dibikin lebih besar / standout */
-.nav-dropdown.nav-dropdown--selected .nav-dropdown-toggle{
+/* .nav-dropdown.nav-dropdown--selected .nav-dropdown-toggle{
   padding-inline: 18px;
   padding-block: 12px;
   background: color-mix(in oklab, var(--brand, #b7410e) 12%, transparent);
   box-shadow:
     0 0 0 1px color-mix(in oklab, var(--brand, #b7410e) 35%, transparent),
     0 10px 30px rgba(0,0,0,.18);
-}
+} */
 
 /* Hamburger + Drawer (mobile) */
 .hamburger{

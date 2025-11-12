@@ -25,8 +25,8 @@
 
         {{-- Brand / Logo --}}
         <a class="brand" href="#home" data-nav="home">
-            <span class="brand-icon" aria-hidden="true">🧭</span>
-            <span class="brand-text">Piforrr7</span>
+            <span class="brand-icon" aria-hidden="true"></span>
+            <span class="brand-text">Lentara</span>
         </a>
 
         {{-- Link navbar (desktop) --}}
@@ -110,10 +110,10 @@
                     <span class="icon">📜</span><span>Cerita</span>
                 </button>
 
-                {{-- Statistik pulau --}}
+                {{-- Statistik pulau
                 <button class="nav-btn" data-target="#stats">
                     <span class="icon">📊</span><span>Statistik</span>
-                </button>
+                </button> --}}
 
                 {{-- DROPDOWN PULAU JUGA TAMPIL DI MODE ISLAND --}}
                 <div
@@ -191,7 +191,7 @@
     {{-- ===== DRAWER / SIDEBAR MOBILE ===== --}}
     <aside class="drawer" id="drawer" aria-hidden="true">
         <div class="drawer-header">
-            <div class="drawer-brand">🧭 Piforrr7</div>
+            <div class="drawer-brand">Lentara</div>
             {{-- Tombol X untuk menutup drawer --}}
             <button id="closeDrawer" class="close-drawer" aria-label="Tutup menu">✕</button>
         </div>

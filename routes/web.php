@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IslandController;
 use App\Http\Controllers\Admin\IslandStatController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\NusantaraChatController;
+
+Route::post('/nusantara-ai/chat', [NusantaraChatController::class, 'chat'])
+    ->name('nusantara.chat');
 
 /*
 |--------------------------------------------------------------------------
